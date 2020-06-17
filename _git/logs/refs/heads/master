@@ -1,0 +1,26 @@
+0000000000000000000000000000000000000000 8b5bc63bea9ab49de407ec69ac8cfb70e2f909c8 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1590504185 +0200	commit (initial): first upload
+8b5bc63bea9ab49de407ec69ac8cfb70e2f909c8 4698c5d367d01cb11a838d1bcd938b7054cc1db9 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1590507021 +0200	commit: add file spottigram.py
+4698c5d367d01cb11a838d1bcd938b7054cc1db9 1d75cd68c6782fad9bdea0fa2d59ea915ab35a73 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1590508993 +0200	commit: add file testbot.py
+1d75cd68c6782fad9bdea0fa2d59ea915ab35a73 dc70953dfe1b69412c9b24b2e52a242083bb6362 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1590585101 +0200	commit: update spottigram.py
+dc70953dfe1b69412c9b24b2e52a242083bb6362 e9d4c5171ae431998b35e2f975c2e2ccd13dee06 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1590598143 +0200	commit: updates
+e9d4c5171ae431998b35e2f975c2e2ccd13dee06 a951450e8c510cee0b812a34fe2b7d3749b3ce52 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1591976324 +0200	commit: update file spottigram.py
+a951450e8c510cee0b812a34fe2b7d3749b3ce52 b52e4f2d11fc46776e65bc118e25a4b007492682 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1591976592 +0200	commit: deleted file testbot.py
+b52e4f2d11fc46776e65bc118e25a4b007492682 fd56ad49ecaa98d536f60bd404ecd3d0e7bc034d Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592060309 +0200	commit: access to the musicXmatch API
+fd56ad49ecaa98d536f60bd404ecd3d0e7bc034d c9339914b02e5ce85f3307141878989f2cf23f29 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592215501 +0200	commit: renamed prject
+c9339914b02e5ce85f3307141878989f2cf23f29 b73f587185242ba9ba8971e1c9235a73fdf32f05 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592216444 +0200	commit: update readme.md
+b73f587185242ba9ba8971e1c9235a73fdf32f05 a285ba1158bee0b7184f9b0fc94583550703524d Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592216599 +0200	commit: update readme.md
+a285ba1158bee0b7184f9b0fc94583550703524d 2805ce305dbd4652b1425bd739895f0a0b230ea0 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592216882 +0200	commit: update readme.md
+2805ce305dbd4652b1425bd739895f0a0b230ea0 3948b5d6954eab2ae4e3d1f9c3029808ae02ee7d Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592224383 +0200	commit: change the command in search using q parameter in the musixmatch API
+3948b5d6954eab2ae4e3d1f9c3029808ae02ee7d 2150b3104738b678922b51c6afb14b379c6f6d69 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592235035 +0200	commit: add the appspec.yml file
+2150b3104738b678922b51c6afb14b379c6f6d69 f8d245ee7764ae68f7f740da767c72b569cc4d67 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592236409 +0200	commit: fix the deply pipeline (codeploy)
+f8d245ee7764ae68f7f740da767c72b569cc4d67 bba355489994027dd3ae2d5c817d4d0c1a687c46 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592237686 +0200	commit: update scripts foplder
+bba355489994027dd3ae2d5c817d4d0c1a687c46 33351d1af23d86e84bcdb6b338871d6b284cca51 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592237933 +0200	commit: update scripts foplder
+33351d1af23d86e84bcdb6b338871d6b284cca51 e9ea77bcc8ddba495843002573374134b78be498 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592239805 +0200	commit: update scripts folder
+e9ea77bcc8ddba495843002573374134b78be498 a87c51bda555d160dfd2b83f07362d7e614974b8 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592241216 +0200	commit: update scripts folder
+a87c51bda555d160dfd2b83f07362d7e614974b8 4f7b4d0cb913d3d4a4d017cf1fb8e332bb1c7411 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592241833 +0200	commit: update scripts appspec.yml
+4f7b4d0cb913d3d4a4d017cf1fb8e332bb1c7411 e1bbe5e820326289dbb6081814858e906d9b25e5 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592293997 +0200	commit: update scripts appspec.yml
+e1bbe5e820326289dbb6081814858e906d9b25e5 60e6b837d02e478dc978255de3a75c9e0c707951 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592296185 +0200	commit: update scripts appspec.yml
+60e6b837d02e478dc978255de3a75c9e0c707951 e7b2c4ec4fe60b2e88dd8ca663784e6dde785281 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592296443 +0200	commit: update scripts appspec.yml
+e7b2c4ec4fe60b2e88dd8ca663784e6dde785281 f8b0ac2def82dad150ea7cf13f390a4ada9429ac Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592297094 +0200	commit: update scripts appspec.yml
+f8b0ac2def82dad150ea7cf13f390a4ada9429ac e522b7ac9333813175d63c1df410ff121b47646a Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592299373 +0200	commit: remove some scripts
+e522b7ac9333813175d63c1df410ff121b47646a bb1c6fa70f8ec1f4ed118b64c2925737ff7a1516 Lorenzo Lombardi <65155343+thrama@users.noreply.github.com> 1592313641 +0200	commit: update lyrixgram.py
