@@ -1,25 +1,30 @@
 import json
 import requests
 import logging
+import os
+from pathlib import Path, PureWindowsPath
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
-# global variables
-musixmach_apikey = 'a1bfde9259fbb50d5022a3f6bee13bbe'
-bot_token = '1218730927:AAE661Zx0OonH1gEx-DJNm3ZASP0MUPNsvA'
-#bot_chatID = '1273304940'
+# set credentials
+with open(PureWindowsPath('confs/credentials.json'), 'r') as json_file:
+  confs = json.load(json_file)
+musixmach_apikey = confs['credentials']['musicxmatch_apikey']
+bot_token = confs['credentials']['telegrambot_token']
 
-# Enable logging
+# enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
+
 def hello(update, context):
     """Say hello."""
     update.message.reply_text(
         'Hello {}'.format(update.message.from_user.first_name))
+
 
 def findLyrics(update, context):
     """Search text in the song title or artist name or lyrics. """
@@ -30,20 +35,31 @@ def findLyrics(update, context):
     if text == '' or text == ' ':
         update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
     else:
-        response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmach_apikey}&q={text}&s_track_rating=desc&page=1&page_size=5')
-        results = response.json()
+        try: 
+            # connect to the API service
+            response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmach_apikey}&q={text}&s_track_rating=desc&page=1&page_size=5')
+            results = response.json()
 
-        n = 0
-        for t in results["message"]["body"]["track_list"]:
-            n += 1
-            if n == 1: #best result
-                update.message.reply_text(f'Best result\n {n}: {t["track"]["track_name"]} - {t["track"]["artist_name"]} [{t["track"]["track_share_url"]}]')    
-            else:
-                update.message.reply_text(f'{n}: {t["track"]["track_name"]} - {t["track"]["artist_name"]}')
+        except:
+            update.message.reply_text(f'Ops. Something were wrong with the connection...')
+            logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+        else:
+            if results["message"]["header"]["status_code"] == 200: # the request was successful
+                n = 0
+                for t in results["message"]["body"]["track_list"]:
+                    n += 1
+                    if n == 1: #best result
+                        update.message.reply_text(f'Best result\n {n}: {t["track"]["track_name"]} - {t["track"]["artist_name"]} [{t["track"]["track_share_url"]}]')    
+                    else:
+                        update.message.reply_text(f'{n}: {t["track"]["track_name"]} - {t["track"]["artist_name"]}')
             
+                #total match founds
+                update.message.reply_text(f'Results: {n} / {results["message"]["header"]["available"]}')
+            
+            else:
+                update.message.reply_text(f'Ops. Something were wrong...')
 
-        #total match founds
-        update.message.reply_text(f'Results: {n} / {results["message"]["header"]["available"]}')
 
 def error(update, context):
     """Log Errors caused by Updates."""

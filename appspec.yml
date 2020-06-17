@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /lyrixgram.py
+  - source: /
     destination: /home/ec2-user/lyrixgram
 hooks:
     ApplicationStart:
