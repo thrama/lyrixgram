@@ -8,10 +8,12 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
 # set credentials
-with open(PureWindowsPath('confs/credentials.json'), 'r') as json_file:
+with open(Path('confs/credentials.json'), 'r') as json_file:
   confs = json.load(json_file)
 musixmach_apikey = confs['credentials']['musicxmatch_apikey']
 bot_token = confs['credentials']['telegrambot_token']
+#musixmach_apikey = 'a1bfde9259fbb50d5022a3f6bee13bbe'
+#bot_token = '1218730927:AAE661Zx0OonH1gEx-DJNm3ZASP0MUPNsvA'
 
 # enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
