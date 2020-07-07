@@ -2,8 +2,8 @@ import json
 import requests
 import logging
 import os
-from pathlib import Path, PureWindowsPath
-from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
+from pathlib import Path
+from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
@@ -37,28 +37,53 @@ def findLyrics(update, context):
     else:
         try: 
             # connect to the API service
-            response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmach_apikey}&q={text}&s_track_rating=desc&page=1&page_size=5')
+            response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmach_apikey}&q={text}&s_track_rating=desc&page=1&page_size=5&country=it')
             results = response.json()
+            logger.debug(f'{results}')
 
         except:
-            update.message.reply_text(f'Ops. Something were wrong with the connection...')
-            logger.warning('Update "%s" caused error "%s"', update, context.error)
-
+            logger.error(f'Exception error: {context.error}')
+            
         else:
             if results["message"]["header"]["status_code"] == 200: # the request was successful
                 n = 0
                 for t in results["message"]["body"]["track_list"]:
                     n += 1
                     if n == 1: #best result
-                        update.message.reply_text(f'Best result\n {n}: {t["track"]["track_name"]} - {t["track"]["artist_name"]} [{t["track"]["track_share_url"]}]')    
+                        update.message.reply_text(f'*** Best result')
+                        update.message.reply_text(f'{n}: <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
+                        update.message.reply_text(f'***')
                     else:
-                        update.message.reply_text(f'{n}: {t["track"]["track_name"]} - {t["track"]["artist_name"]}')
+                        update.message.reply_text(f'{n}: <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
             
                 #total match founds
                 update.message.reply_text(f'Results: {n} / {results["message"]["header"]["available"]}')
+                update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">Musixmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
             
+            # authentication error
+            elif results["message"]["header"]["status_code"] == 401:
+                update.message.reply_text(f'Ops. Something were wrong...')
+                logger.debug(f'Authentication failed: {results}')
+
+            # the usage limit has been reached
+            elif results["message"]["header"]["status_code"] == 402:
+                update.message.reply_text(f'Ops. Something were wrong...')
+                logger.debug(f'The usage limit has been reached: {results}')
+
+            # system busy
+            elif results["message"]["header"]["status_code"] == 503:
+                update.message.reply_text(f'Musixmatch is a bit busy at the moment and your request can’t be satisfied.')
+                logger.debug(f'The usage limit has been reached: {results}')
+
+            # others status codes
+            # list of status codes: https://developer.musixmatch.com/documentation/status-codes
             else:
                 update.message.reply_text(f'Ops. Something were wrong...')
+                logger.debug(f'Generic error: {results}')
+
+#def iamLucky(update, context):
+#    """Log Errors caused by Updates."""
+#    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
 def error(update, context):
@@ -76,6 +101,7 @@ def main():
 
     sg.add_handler(CommandHandler('hello', hello))
     sg.add_handler(CommandHandler('search', findLyrics))
+    #sg.add_handler(CommandHandler('imlucky', iamLucky))
 
     sg.add_error_handler(error)
 
