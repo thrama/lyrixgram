@@ -34,6 +34,7 @@ def findLyrics(update, context):
     text = text.replace('/search', '') # remove command from text
     if text == '' or text == ' ':
         update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
+        
     else:
         try: 
             # connect to the API service
@@ -58,7 +59,7 @@ def findLyrics(update, context):
             
                 #total match founds
                 update.message.reply_text(f'Results: {n} / {results["message"]["header"]["available"]}')
-                update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">Musixmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+                update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
             
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
@@ -72,7 +73,7 @@ def findLyrics(update, context):
 
             # system busy
             elif results["message"]["header"]["status_code"] == 503:
-                update.message.reply_text(f'Musixmatch is a bit busy at the moment and your request can’t be satisfied.')
+                update.message.reply_text(f'musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
                 logger.debug(f'The usage limit has been reached: {results}')
 
             # others status codes

@@ -1,6 +1,6 @@
 # Lyrixgram 0.1.1
 
-Telegram bot [@Lyrixgrambot](https://t.me/Lyrixgrambot) to search lyrics with [musixmatch](https://www.musixmatch.com/).
+Telegram bot [@Lyrixgrambot](https://t.me/Lyrixgrambot) to search lyrics with [musiXmatch](https://www.musixmatch.com/).
 
 ## Getting Started
 
@@ -12,9 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-The first step needed to do is create the file for the credentials.
-
-I created a JSON file in the conf directory. The structure of the file is:
+The first step needed to do is create the file for the credentials. You have to create a JSON file in the /conf directory. The structure of the file is:
 
 ```
 {
@@ -33,14 +31,6 @@ with open(Path('confs/credentials.json'), 'r') as json_file:
 musixmach_apikey = confs['credentials']['musicxmatch_apikey']
 bot_token = confs['credentials']['telegrambot_token']
 ```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Deployment
 
@@ -63,9 +53,3 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
