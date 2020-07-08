@@ -1,6 +1,6 @@
 # Lyrixgram
 
-Telegram bot to search lyrics and other information on musiXmatch.
+Telegram bot [@Lyrixgrambot](https://t.me/Lyrixgrambot) to search lyrics with [musixmatch](https://www.musixmatch.com/).
 
 ## Getting Started
 
@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-[Telegram](https://telegram.org/) app is available on a device.
+[Telegram](https://telegram.org/) app is available on the majority of devices.
 
 ### Installing
 
@@ -45,8 +45,6 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Authors
 
 * **Lorenzo Lombardi** - [GitHub](https://github.com/thrama)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
