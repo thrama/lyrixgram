@@ -6,6 +6,7 @@ from pathlib import Path
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
+from random import *
 
 # set credentials
 with open(Path('confs/credentials.json'), 'r') as json_file:
@@ -27,7 +28,7 @@ def hello(update, context):
 
 
 def findLyrics(update, context):
-    """Search text in the song title or artist name or lyrics. """
+    """Search text in the song title or artist name or lyrics."""
     global musixmach_apikey
 
     text = update.message.text
@@ -81,10 +82,58 @@ def findLyrics(update, context):
             else:
                 update.message.reply_text(f'Ops. Something were wrong...')
                 logger.debug(f'Generic error: {results}')
+                
 
-#def iamLucky(update, context):
-#    """Log Errors caused by Updates."""
-#    logger.warning('Update "%s" caused error "%s"', update, context.error)
+def iamLucky(update, context):
+    """If you fill lucky..."""
+    global musixmach_apikey
+
+    trackFind = False
+    while trackFind == False:
+
+        try: 
+            randomNumber = randint(1, 6000000)
+
+            # connect to the API service
+            response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.get?apikey={musixmach_apikey}&commontrack_id={randomNumber}')
+            results = response.json()
+            logger.debug(f'{results}')
+
+        except:
+            logger.error(f'Exception error: {context.error}')
+            
+        else:
+            if results["message"]["header"]["status_code"] == 200: # the request was successful
+                update.message.reply_text(f'*** Luckiest result')
+                update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
+                update.message.reply_text(f'***')
+            
+                update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+                trackFind = True
+
+            # authentication error
+            elif results["message"]["header"]["status_code"] == 401:
+                update.message.reply_text(f'AUTH ERROR: Ops. Something were wrong...')
+                logger.debug(f'Authentication failed: {results}')
+                trackFind = True
+
+            # the usage limit has been reached
+            elif results["message"]["header"]["status_code"] == 402:
+                update.message.reply_text(f'LIMIT ERROR: Ops. Something were wrong...')
+                logger.debug(f'The usage limit has been reached: {results}')
+                trackFind = True
+
+            # system busy
+            elif results["message"]["header"]["status_code"] == 503:
+                update.message.reply_text(f'musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
+                logger.debug(f'The usage limit has been reached: {results}')
+                trackFind = True
+
+            # others status codes
+            # list of status codes: https://developer.musixmatch.com/documentation/status-codes
+            else:
+                #update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
+                logger.debug(f'Generic error: {results}')
 
 
 def error(update, context):
@@ -102,7 +151,7 @@ def main():
 
     sg.add_handler(CommandHandler('hello', hello))
     sg.add_handler(CommandHandler('search', findLyrics))
-    #sg.add_handler(CommandHandler('imlucky', iamLucky))
+    sg.add_handler(CommandHandler('iamlucky', iamLucky))
 
     sg.add_error_handler(error)
 
