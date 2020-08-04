@@ -6,7 +6,7 @@ from pathlib import Path
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
-from random import *
+import random
 
 # set credentials
 with open(Path('confs/credentials.json'), 'r') as json_file:
@@ -21,10 +21,16 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
+def showLogo(update, context):
+    randomNumber = random.randint(1, 5)
+
+    if randomNumber == 5:
+        update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+
+
 def hello(update, context):
     """Say hello."""
-    update.message.reply_text(
-        'Hello {}'.format(update.message.from_user.first_name))
+    update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
 
 
 def findLyrics(update, context):
@@ -53,15 +59,15 @@ def findLyrics(update, context):
                     n += 1
                     if n == 1: #best result
                         update.message.reply_text(f'*** Best result')
-                        update.message.reply_text(f'{n}: <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
+                        update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
                         update.message.reply_text(f'***')
                     else:
-                        update.message.reply_text(f'{n}: <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+                        update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
             
                 #total match founds
                 update.message.reply_text(f'Results: {n} / {results["message"]["header"]["available"]}')
-                update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
-            
+                showLogo(update, context)
+
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
                 update.message.reply_text(f'Ops. Something were wrong...')
@@ -89,10 +95,13 @@ def iamLucky(update, context):
     global musixmach_apikey
 
     trackFind = False
+
+    # loop until a track is found or the process obtain a blocking error
     while trackFind == False:
 
-        try: 
-            randomNumber = randint(1, 6000000)
+        try:
+            # generate a random number to use as track id
+            randomNumber = random.randint(1, 6000000)
 
             # connect to the API service
             response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.get?apikey={musixmach_apikey}&commontrack_id={randomNumber}')
@@ -106,9 +115,9 @@ def iamLucky(update, context):
             if results["message"]["header"]["status_code"] == 200: # the request was successful
                 update.message.reply_text(f'*** Luckiest result')
                 update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
-                update.message.reply_text(f'***')
-            
-                update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+                #update.message.reply_text(f'***')
+                showLogo(update, context)                
+                
                 trackFind = True
 
             # authentication error
