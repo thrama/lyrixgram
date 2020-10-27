@@ -21,12 +21,21 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
+# LIBS #######################################################################
+
 def showLogo(update, context):
     randomNumber = random.randint(1, 5)
 
     if randomNumber == 5:
         update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
+
+def error(update, context):
+    """Log Errors caused by Updates."""
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+
+# COMMANDS ###################################################################
 
 def hello(update, context):
     """Say hello."""
@@ -145,10 +154,7 @@ def iamLucky(update, context):
                 logger.debug(f'Generic error: {results}')
 
 
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
-
+# MAIN #######################################################################
 
 def main():
     """Start the bot."""
