@@ -39,7 +39,9 @@ def error(update, context):
 
 def hello(update, context):
     """Say hello."""
-    update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
+    #update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
+    update.message.reply_text(f'Hello {format(update.message.from_user)}')
+
 
 
 def findLyrics(update, context):
