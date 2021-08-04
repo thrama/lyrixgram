@@ -1,7 +1,6 @@
 import json
 import requests
 import logging
-import os
 from pathlib import Path
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
@@ -29,7 +28,7 @@ def showLogo(update):
     randomNumber = random.randint(1, 5)
 
     if randomNumber == 5:
-        update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
 def error(update, context):
@@ -41,7 +40,7 @@ def error(update, context):
 
 def hello(update):
     """Say hello."""
-    #update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
+    # update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
     update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
 
@@ -70,9 +69,9 @@ def findLyrics(update, context):
                 for t in results["message"]["body"]["track_list"]:
                     n += 1
                     if n == 1: # best result
-                        update.message.reply_text(f'*** Best result')
+                        update.message.reply_text('*** Best result')
                         update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
-                        update.message.reply_text(f'***')
+                        update.message.reply_text('***')
                     else:
                         update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
             
@@ -82,7 +81,7 @@ def findLyrics(update, context):
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
-                update.message.reply_text(f'Ops. Something were wrong...')
+                update.message.reply_text('Ops. Something were wrong...')
                 logger.debug('Authentication failed: {results}')
 
             # the usage limit has been reached
@@ -96,7 +95,8 @@ def findLyrics(update, context):
                 logger.debug(f'The usage limit has been reached: {results}')
 
             # others status codes
-            # list of status codes: https://developer.musixmatch.com/documentation/status-codes
+            # list of status codes: 
+            # https://developer.musixmatch.com/documentation/status-codes
             else:
                 update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'Generic error: {results}')
@@ -127,7 +127,7 @@ def iamLucky(update, context):
             if results["message"]["header"]["status_code"] == 200: # the request was successful
                 update.message.reply_text('*** Luckiest result')
                 update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
-                #update.message.reply_text(f'***')
+                # update.message.reply_text(f'***')
                 showLogo(update, context)
                 
                 trackFind = True
@@ -151,7 +151,8 @@ def iamLucky(update, context):
                 trackFind = True
 
             # others status codes
-            # list of status codes: https://developer.musixmatch.com/documentation/status-codes
+            # list of status codes: 
+            # https://developer.musixmatch.com/documentation/status-codes
             else:
                 #update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
                 logger.debug(f'Generic error: {results}')
