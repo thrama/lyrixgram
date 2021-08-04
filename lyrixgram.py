@@ -44,12 +44,12 @@ def hello(update):
     update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
 
-def findLyrics(update, context):
+def findLyrics(update):
     """Search text in the song title or artist name or lyrics."""
     global musixmach_apikey
 
     text = update.message.text
-    text = text.replace('/search', '') # remove command from text
+    text = text.replace('/search', '')  # remove command from text
     if text in ('', ' '):
         update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
         
@@ -62,9 +62,9 @@ def findLyrics(update, context):
 
         except Exception as e:
             logger.error(f'Exception error: {str(e)}')
-            
+
         else:
-            if results["message"]["header"]["status_code"] == 200: # the request was successful
+            if results["message"]["header"]["status_code"] == 200:  # the request was successful
                 n = 0
                 for t in results["message"]["body"]["track_list"]:
                     n += 1
@@ -74,7 +74,7 @@ def findLyrics(update, context):
                         update.message.reply_text('***')
                     else:
                         update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
-            
+
                 # total match founds
                 update.message.reply_text(f'Results: {n} / {results["message"]["header"]["available"]}')
                 showLogo(update)
@@ -100,9 +100,9 @@ def findLyrics(update, context):
             else:
                 update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'Generic error: {results}')
-                
 
-def iamLucky(update, context):
+
+def iamLucky(update):
     """If you fill lucky..."""
     global musixmach_apikey
 
@@ -122,14 +122,13 @@ def iamLucky(update, context):
 
         except Exception as e:
             logger.error(f'Exception error: {str(e)}')
-            
+
         else:
-            if results["message"]["header"]["status_code"] == 200: # the request was successful
+            if results["message"]["header"]["status_code"] == 200:  # the request was successful
                 update.message.reply_text('*** Luckiest result')
                 update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
                 # update.message.reply_text(f'***')
                 showLogo(update)
-                
                 trackFind = True
 
             # authentication error
