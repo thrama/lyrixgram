@@ -27,7 +27,7 @@ def showLogo(update, context):
     randomNumber = random.randint(1, 5)
 
     if randomNumber == 5:
-        update.message.reply_text(f'<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
 def error(update, context):
@@ -67,9 +67,9 @@ def findLyrics(update, context):
                 for t in results["message"]["body"]["track_list"]:
                     n += 1
                     if n == 1: #best result
-                        update.message.reply_text(f'*** Best result')
+                        update.message.reply_text('*** Best result')
                         update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
-                        update.message.reply_text(f'***')
+                        update.message.reply_text('***')
                     else:
                         update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
             
@@ -79,23 +79,23 @@ def findLyrics(update, context):
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
-                update.message.reply_text(f'Ops. Something were wrong...')
+                update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'Authentication failed: {results}')
 
             # the usage limit has been reached
             elif results["message"]["header"]["status_code"] == 402:
-                update.message.reply_text(f'Ops. Something were wrong...')
+                update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'The usage limit has been reached: {results}')
 
             # system busy
             elif results["message"]["header"]["status_code"] == 503:
-                update.message.reply_text(f'musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
+                update.message.reply_text('musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
                 logger.debug(f'The usage limit has been reached: {results}')
 
             # others status codes
             # list of status codes: https://developer.musixmatch.com/documentation/status-codes
             else:
-                update.message.reply_text(f'Ops. Something were wrong...')
+                update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'Generic error: {results}')
                 
 
@@ -122,7 +122,7 @@ def iamLucky(update, context):
             
         else:
             if results["message"]["header"]["status_code"] == 200: # the request was successful
-                update.message.reply_text(f'*** Luckiest result')
+                update.message.reply_text('*** Luckiest result')
                 update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)    
                 #update.message.reply_text(f'***')
                 showLogo(update, context)                
@@ -131,19 +131,19 @@ def iamLucky(update, context):
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
-                update.message.reply_text(f'AUTH ERROR: Ops. Something were wrong...')
+                update.message.reply_text('AUTH ERROR: Ops. Something were wrong...')
                 logger.debug(f'Authentication failed: {results}')
                 trackFind = True
 
             # the usage limit has been reached
             elif results["message"]["header"]["status_code"] == 402:
-                update.message.reply_text(f'LIMIT ERROR: Ops. Something were wrong...')
+                update.message.reply_text('LIMIT ERROR: Ops. Something were wrong...')
                 logger.debug(f'The usage limit has been reached: {results}')
                 trackFind = True
 
             # system busy
             elif results["message"]["header"]["status_code"] == 503:
-                update.message.reply_text(f'musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
+                update.message.reply_text('musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
                 logger.debug(f'The usage limit has been reached: {results}')
                 trackFind = True
 
