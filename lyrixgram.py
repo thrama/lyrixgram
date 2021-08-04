@@ -52,7 +52,7 @@ def findLyrics(update):
     text = text.replace('/search', '')  # remove command from text
     if text in ('', ' '):
         update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
-        
+
     else:
         try:
             # connect to the API service
@@ -68,7 +68,7 @@ def findLyrics(update):
                 n = 0
                 for t in results["message"]["body"]["track_list"]:
                     n += 1
-                    if n == 1: # best result
+                    if n == 1:  # best result
                         update.message.reply_text('*** Best result')
                         update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
                         update.message.reply_text('***')
