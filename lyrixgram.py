@@ -108,7 +108,7 @@ def iamLucky(update, context):
     trackFind = False
 
     # loop until a track is found or the process obtain a blocking error
-    while trackFind == False:
+    while trackFind is False:
 
         try:
             # generate a random number to use as track id
