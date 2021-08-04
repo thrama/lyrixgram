@@ -60,8 +60,8 @@ def findLyrics(update, context):
             results = response.json()
             logger.debug(f'{results}')
 
-        except:
-            logger.error(f'Exception error: {context.error}')
+        except Exception as e:
+            logger.error(f'Exception error: {str(e)}')
             
         else:
             if results["message"]["header"]["status_code"] == 200: # the request was successful
@@ -120,8 +120,8 @@ def iamLucky(update, context):
             results = response.json()
             logger.debug(f'{results}')
 
-        except:
-            logger.error(f'Exception error: {context.error}')
+        except Exception as e:
+            logger.error(f'Exception error: {str(e)}')
             
         else:
             if results["message"]["header"]["status_code"] == 200: # the request was successful
