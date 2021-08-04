@@ -38,13 +38,13 @@ def error(update, context):
 
 # COMMANDS ###################################################################
 
-def hello(update):
+def hello(update, context):
     """Say hello."""
-    # update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
-    update.message.reply_text(f'Hello {format(update.message.from_user)}')
+    update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
+    # update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
 
-def findLyrics(update):
+def findLyrics(update, context):
     """Search text in the song title or artist name or lyrics."""
     global musixmach_apikey
 
@@ -76,7 +76,7 @@ def findLyrics(update):
                         update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
                 # total match founds
-                update.message.reply_text(f'Results: {n} / {results["message"]["header"]["available"]}')
+                update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
                 showLogo(update)
 
             # authentication error
@@ -102,7 +102,7 @@ def findLyrics(update):
                 logger.debug(f'Generic error: {results}')
 
 
-def iamLucky(update):
+def iamLucky(update, context):
     """If you fill lucky..."""
     global musixmach_apikey
 
