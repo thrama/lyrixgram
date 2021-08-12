@@ -60,8 +60,14 @@ def findLyrics(update, context):
             results = response.json()
             logger.debug(f'{results}')
 
-        except Exception as e:
-            logger.error(f'Exception error: {str(e)}')
+        except requests.exceptions.HTTPError as errh:
+            logger.error(f"An Http Error occurred: {repr(errh)}")
+        except requests.exceptions.ConnectionError as errc:
+            logger.error(f"An Error Connecting to the API occurred: {repr(errc)}")
+        except requests.exceptions.Timeout as errt:
+            logger.error(f"A Timeout Error occurred: {repr(errt)}")
+        except requests.exceptions.RequestException as err:
+            logger.error(f"An Unknown Error occurred: {repr(err)}")
 
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
@@ -120,8 +126,14 @@ def iamLucky(update, context):
             results = response.json()
             logger.debug(f'{results}')
 
-        except Exception as e:
-            logger.error(f'Exception error: {str(e)}')
+        except requests.exceptions.HTTPError as errh:
+            logger.error(f"An Http Error occurred: {repr(errh)}")
+        except requests.exceptions.ConnectionError as errc:
+            logger.error(f"An Error Connecting to the API occurred: {repr(errc)}")
+        except requests.exceptions.Timeout as errt:
+            logger.error(f"A Timeout Error occurred: {repr(errt)}")
+        except requests.exceptions.RequestException as err:
+            logger.error(f"An Unknown Error occurred: {repr(err)}")
 
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
