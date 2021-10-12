@@ -16,12 +16,13 @@ bot_token = confs['credentials']['telegrambot_token']
 
 # enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-
+#
 # LIBS #######################################################################
-
+#
+# showLogo ###################################################################
 def showLogo(update):
     """Just shows the logo."""
     randomNumber = random.randint(1, 5)
@@ -29,20 +30,45 @@ def showLogo(update):
     if randomNumber == 5:
         update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
+# showResults ################################################################
+def showResults(update, results):
+    """Shows the find results."""
+    n = 0
+    for t in results["message"]["body"]["track_list"]:
+        n += 1
+        if n == 1:  # best result
+            update.message.reply_text('*** Best result')
+            update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
+            update.message.reply_text('***')
+        else:
+            update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
+    # total match founds
+    update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
+    showLogo(update)
+
+# showLukyResults ################################################################
+def showLukyResults(update, results):
+    update.message.reply_text('*** Luckiest result')
+    update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
+    # update.message.reply_text(f'***')
+    showLogo(update)
+
+# error ######################################################################
 def error(update, context):
     """Log errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-
+#
 # COMMANDS ###################################################################
-
+#
+# hello ######################################################################
 def hello(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
     # update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
-
+# findLyrics #################################################################
 def findLyrics(update, context):
     """Search text in the song title or artist name or lyrics."""
     global musixmach_apikey
@@ -67,22 +93,9 @@ def findLyrics(update, context):
             logger.error(f"A Timeout Error occurred: {repr(errt)}")
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
-
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                n = 0
-                for t in results["message"]["body"]["track_list"]:
-                    n += 1
-                    if n == 1:  # best result
-                        update.message.reply_text('*** Best result')
-                        update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
-                        update.message.reply_text('***')
-                    else:
-                        update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
-
-                # total match founds
-                update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
-                showLogo(update)
+                showResults(update, results)       
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
@@ -106,7 +119,7 @@ def findLyrics(update, context):
                 update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'Generic error: {results}')
 
-
+# iamLucky ###################################################################
 def iamLucky(update, context):
     """If you fill lucky..."""
     global musixmach_apikey
@@ -136,10 +149,7 @@ def iamLucky(update, context):
 
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                update.message.reply_text('*** Luckiest result')
-                update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
-                # update.message.reply_text(f'***')
-                showLogo(update)
+                showLukyResults(update, results)
                 trackFind = True
 
             # authentication error
@@ -167,9 +177,10 @@ def iamLucky(update, context):
                 # update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
                 logger.debug(f'Generic error: {results}')
 
-
+#
 # MAIN #######################################################################
-
+#
+# main #######################################################################
 def main():
     """Start the bot."""
     global bot_token
