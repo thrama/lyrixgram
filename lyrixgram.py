@@ -19,6 +19,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 #
 # LIBS #######################################################################
 #
@@ -29,6 +30,7 @@ def showLogo(update):
 
     if randomNumber == 5:
         update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+
 
 # showResults ################################################################
 def showResults(update, results):
@@ -47,6 +49,7 @@ def showResults(update, results):
     update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
     showLogo(update)
 
+
 # showLukyResults ################################################################
 def showLukyResults(update, results):
     update.message.reply_text('*** Luckiest result')
@@ -54,10 +57,12 @@ def showLukyResults(update, results):
     # update.message.reply_text(f'***')
     showLogo(update)
 
+
 # error ######################################################################
 def error(update, context):
     """Log errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
+
 
 #
 # COMMANDS ###################################################################
@@ -67,6 +72,7 @@ def hello(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
     # update.message.reply_text(f'Hello {format(update.message.from_user)}')
+
 
 # findLyrics #################################################################
 def findLyrics(update, context):
@@ -118,6 +124,7 @@ def findLyrics(update, context):
             else:
                 update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'Generic error: {results}')
+
 
 # iamLucky ###################################################################
 def iamLucky(update, context):
@@ -176,6 +183,7 @@ def iamLucky(update, context):
             else:
                 # update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
                 logger.debug(f'Generic error: {results}')
+
 
 #
 # MAIN #######################################################################
