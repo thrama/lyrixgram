@@ -97,7 +97,7 @@ def findAll(update, context):
 
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
-            
+
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
                 showResults(update, results)       
@@ -150,7 +150,7 @@ def findByTitle(update, context):
 
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
-            
+
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
                 showResults(update, results)       
