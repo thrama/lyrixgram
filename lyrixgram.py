@@ -16,7 +16,7 @@ bot_token = confs['credentials']['telegrambot_token']
 
 # enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -30,7 +30,10 @@ def showLogo(update):
     randomNumber = random.randint(1, 5)
 
     if randomNumber == 5:
-        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', 
+                                    parse_mode=ParseMode.HTML, 
+                                    disable_web_page_preview=True
+                                )
 
 
 # showResults ################################################################

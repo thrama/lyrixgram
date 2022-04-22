@@ -33,10 +33,10 @@ with open(Path('confs/settings.json'), 'r') as json_file:
 ```
 
 ## User's Guide
-`/hello` - Say Hello!
-`/search` - Search any word in the song title or artist name or lyrics
-`/title` - Search any word in the song title
-`/lucky` - I fill lucky!
+* `/hello` - Say Hello!
+* `/search` - Search any word in the song title or artist name or lyrics
+* `/title` - Search any word in the song title
+* `/lucky` - I fill lucky!
 
 ## Built With
 
