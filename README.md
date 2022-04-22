@@ -1,40 +1,42 @@
-# Lyrixgram 0.1.1
+# Lyrixgram
 
 Telegram bot [@Lyrixgrambot](https://t.me/Lyrixgrambot) to search lyrics with [musiXmatch](https://www.musixmatch.com/).
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on deploying the project on a live system.
 
 ### Prerequisites
 
-[Telegram](https://telegram.org/) app is available on the majority of devices.
+[Telegram](https://telegram.org/) app is available on most devices.
+[python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) library provides a pure Python interface for the Telegram Bot API.
 
 ### Installing
 
-The first step needed to do is create the file for the credentials. You have to create a JSON file in the /conf directory. The structure of the file is:
+The first step is to create the file for the credentials. You have to make a JSON file in the /conf directory. The structure of the file is:
 
 ```
 {
-	"credentials": {
-		"musicxmatch_apikey": <API key>,
-		"telegrambot_token": <token>
-	}
+    "credentials": {
+        "musicxmatch_apikey": <API key>,
+        "telegrambot_token": <token>
+    }
 }
 ```
 
-You also need to update the parte of the code to load the credential:
+You also need to update the part of the code to load the settings:
+
 ```
-# set credentials
-with open(Path('confs/credentials.json'), 'r') as json_file:
+# read settings
+with open(Path('confs/settings.json'), 'r') as json_file:
   confs = json.load(json_file)
-musixmach_apikey = confs['credentials']['musicxmatch_apikey']
-bot_token = confs['credentials']['telegrambot_token']
 ```
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+## User's Guide
+`/hello` - Say Hello!
+`/search` - Search any word in the song title or artist name or lyrics
+`/title` - Search any word in the song title
+`/lucky` - I fill lucky!
 
 ## Built With
 
@@ -44,7 +46,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/thrama/lyrixgram/tags). 
+We use [SemVer](http://semver.org/) for versioning. See the [tags on this repository](https://github.com/thrama/lyrixgram/tags) for available versions.
 
 ## Authors
 
