@@ -2,17 +2,9 @@ import json
 import requests
 import logging
 from pathlib import Path
-from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode)
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
-                          ConversationHandler)
+from telegram import ParseMode
+from telegram.ext import Updater, CommandHandler
 import random
-
-# read settings
-with open(Path('confs/settings.json'), 'r') as json_file:
-    confs = json.load(json_file)
-
-musixmach_apikey = confs['credentials']['musicxmatch_apikey']
-bot_token = confs['credentials']['telegrambot_token']
 
 # enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -32,8 +24,7 @@ def showLogo(update):
     if randomNumber == 5:
         update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', 
                                     parse_mode=ParseMode.HTML, 
-                                    disable_web_page_preview=True
-                                )
+                                    disable_web_page_preview=True)
 
 
 # showResults ################################################################
@@ -56,6 +47,7 @@ def showResults(update, results):
 
 # showLukyResults ################################################################
 def showLukyResults(update, results):
+    """Show results for command 'lucky'."""
     update.message.reply_text('*** Luckiest result')
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
     # update.message.reply_text(f'***')
@@ -82,7 +74,6 @@ def hello(update, context):
 # findAll ####################################################################
 def findAll(update, context):
     """Search text in the song title or artist name or lyrics."""
-    global musixmach_apikey
 
     text = update.message.text
     text = text.replace('/search', '')  # remove command from text
@@ -137,7 +128,6 @@ def findAll(update, context):
 # findByTitle #################################################################
 def findByTitle(update, context):
     """Search text in the song title."""
-    global musixmach_apikey
 
     text = update.message.text
     text = text.replace('/title', '')  # remove command from text
@@ -193,7 +183,6 @@ def findByTitle(update, context):
 # iamLucky ###################################################################
 def iamLucky(update, context):
     """If you fill lucky..."""
-    global musixmach_apikey
 
     trackFind = False
 
@@ -259,7 +248,15 @@ def iamLucky(update, context):
 # main #######################################################################
 def main():
     """Start the bot."""
-    global bot_token
+    # global var
+    global musixmach_apikey
+
+    # read settings
+    with open(Path('confs/settings.json'), 'r') as json_file:
+        confs = json.load(json_file)
+
+    musixmach_apikey = confs['credentials']['musicxmatch_apikey']
+    bot_token = confs['credentials']['telegrambot_token']
 
     updater = Updater(bot_token, use_context=True)
 
