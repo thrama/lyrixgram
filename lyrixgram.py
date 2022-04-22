@@ -74,7 +74,6 @@ def hello(update, context):
 # findAll ####################################################################
 def findAll(update, context):
     """Search text in the song title or artist name or lyrics."""
-
     text = update.message.text
     text = text.replace('/search', '')  # remove command from text
     if text in ('', ' '):
@@ -128,7 +127,6 @@ def findAll(update, context):
 # findByTitle #################################################################
 def findByTitle(update, context):
     """Search text in the song title."""
-
     text = update.message.text
     text = text.replace('/title', '')  # remove command from text
     if text in ('', ' '):
@@ -183,7 +181,6 @@ def findByTitle(update, context):
 # iamLucky ###################################################################
 def iamLucky(update, context):
     """If you fill lucky..."""
-
     trackFind = False
 
     # loop until a track is found or the process obtain a blocking error
