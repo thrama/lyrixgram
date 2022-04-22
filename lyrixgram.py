@@ -12,9 +12,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-#
-# LIBS #######################################################################
-#
 
 # showLogo ###################################################################
 def showLogo(update):
@@ -50,7 +47,6 @@ def showLukyResults(update, results):
     """Show results for command 'lucky'."""
     update.message.reply_text('*** Luckiest result')
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
-    # update.message.reply_text(f'***')
     showLogo(update)
 
 
@@ -60,15 +56,11 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-#
-# COMMANDS ###################################################################
-#
 
 # hello ######################################################################
 def hello(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
-    # update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
 
 # findAll ####################################################################
@@ -234,18 +226,13 @@ def iamLucky(update, context):
             # list of status codes:
             # https://developer.musixmatch.com/documentation/status-codes
             else:
-                # update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
                 logger.debug(f'Generic error: {results}')
 
 
-#
-# MAIN #######################################################################
-#
 
 # main #######################################################################
 def main():
     """Start the bot."""
-    # global var
     global musixmach_apikey
 
     # read settings
