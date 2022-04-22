@@ -11,6 +11,8 @@ These instructions will get you a copy of the project up and running on your loc
 [Telegram](https://telegram.org/) app is available on most devices.
 [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) library provides a pure Python interface for the Telegram Bot API.
 
+A complete list of libs used is in the file `requirements.txt`.
+
 ### Installing
 
 The first step is to create the file for the credentials. You have to make a JSON file in the /conf directory. The structure of the file is:
