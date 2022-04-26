@@ -80,7 +80,6 @@ def hello(update, context):
 # findAll ####################################################################
 def findAll(update, context):
     """Search text in the song title or artist name or lyrics."""
-    global musixmach_apikey
 
     text = update.message.text
     text = text.replace('/search ', '')  # remove command from text
@@ -135,7 +134,6 @@ def findAll(update, context):
 # findByTitle #################################################################
 def findByTitle(update, context):
     """Search text in the song title."""
-    global musixmach_apikey
 
     text = update.message.text
     text = text.replace('/title ', '')  # remove command from text
@@ -191,7 +189,6 @@ def findByTitle(update, context):
 # iamLucky ###################################################################
 def iamLucky(update, context):
     """If you fill lucky..."""
-    global musixmach_apikey
 
     trackFind = False
 
@@ -257,7 +254,6 @@ def iamLucky(update, context):
 # main #######################################################################
 def main():
     """Start the bot."""
-    global bot_token
 
     updater = Updater(bot_token, use_context=True)
 
