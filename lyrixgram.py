@@ -11,6 +11,13 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# read settings
+with open(Path('confs/settings.json'), 'r') as json_file:
+    confs = json.load(json_file)
+
+musixmach_apikey = confs['credentials']['musicxmatch_apikey']
+bot_token = confs['credentials']['telegrambot_token']
+
 
 #
 # LIBS #######################################################################
@@ -28,7 +35,7 @@ def showLogo(update):
 
 
 # showResults ################################################################
-def showResults(update, results):
+def showResults(update, results, text):
     """Shows the find results."""
     n = 0
     for t in results["message"]["body"]["track_list"]:
@@ -57,7 +64,7 @@ def showLukyResults(update, results):
 # error ######################################################################
 def error(update, context):
     """Log errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+    logger.warning(f'Update {update} caused error {context.error}')
 
 
 #
@@ -68,14 +75,15 @@ def error(update, context):
 def hello(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
-    # update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
 
 # findAll ####################################################################
 def findAll(update, context):
     """Search text in the song title or artist name or lyrics."""
+    global musixmach_apikey
+
     text = update.message.text
-    text = text.replace('/search', '')  # remove command from text
+    text = text.replace('/search ', '')  # remove command from text
     if text in ('', ' '):
         update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
 
@@ -97,10 +105,10 @@ def findAll(update, context):
 
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
-
+            
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showResults(update, results)       
+                showResults(update, results, text)       
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
@@ -127,8 +135,10 @@ def findAll(update, context):
 # findByTitle #################################################################
 def findByTitle(update, context):
     """Search text in the song title."""
+    global musixmach_apikey
+
     text = update.message.text
-    text = text.replace('/title', '')  # remove command from text
+    text = text.replace('/title ', '')  # remove command from text
     if text in ('', ' '):
         update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
 
@@ -150,10 +160,10 @@ def findByTitle(update, context):
 
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
-
+            
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showResults(update, results)       
+                showResults(update, results, text)       
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
@@ -181,6 +191,8 @@ def findByTitle(update, context):
 # iamLucky ###################################################################
 def iamLucky(update, context):
     """If you fill lucky..."""
+    global musixmach_apikey
+
     trackFind = False
 
     # loop until a track is found or the process obtain a blocking error
@@ -245,15 +257,7 @@ def iamLucky(update, context):
 # main #######################################################################
 def main():
     """Start the bot."""
-    # global var
-    global musixmach_apikey
-
-    # read settings
-    with open(Path('confs/settings.json'), 'r') as json_file:
-        confs = json.load(json_file)
-
-    musixmach_apikey = confs['credentials']['musicxmatch_apikey']
-    bot_token = confs['credentials']['telegrambot_token']
+    global bot_token
 
     updater = Updater(bot_token, use_context=True)
 
