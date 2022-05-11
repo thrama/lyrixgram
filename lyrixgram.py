@@ -29,8 +29,8 @@ def showLogo(update):
     randomNumber = random.randint(1, 5)
 
     if randomNumber == 5:
-        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', 
-                                    parse_mode=ParseMode.HTML, 
+        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>',
+                                    parse_mode=ParseMode.HTML,
                                     disable_web_page_preview=True)
 
 
@@ -57,7 +57,6 @@ def showLukyResults(update, results):
     """Show results for command 'lucky'."""
     update.message.reply_text('*** Luckiest result')
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
-    # update.message.reply_text(f'***')
     showLogo(update)
 
 
@@ -106,7 +105,7 @@ def findAll(update, context):
 
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showResults(update, results, text)       
+                showResults(update, results, text)
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
@@ -129,6 +128,7 @@ def findAll(update, context):
             else:
                 update.message.reply_text('Ops. Something were wrong...')
                 logger.debug(f'Generic error: {results}')
+
 
 # findByTitle #################################################################
 def findByTitle(update, context):
@@ -159,7 +159,7 @@ def findByTitle(update, context):
 
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showResults(update, results, text)       
+                showResults(update, results, text)
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
@@ -240,7 +240,6 @@ def iamLucky(update, context):
             # list of status codes:
             # https://developer.musixmatch.com/documentation/status-codes
             else:
-                # update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
                 logger.debug(f'Generic error: {results}')
 
 
