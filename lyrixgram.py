@@ -1,10 +1,12 @@
 import json
 import requests
 import logging
+import random
+from datetime import datetime
 from pathlib import Path
 from telegram import ParseMode
 from telegram.ext import Updater, CommandHandler
-import random
+
 
 # enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -50,7 +52,7 @@ def showResults(update, results, text):
     # total match founds
     update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
     showLogo(update)
-
+  
 
 # showLukyResults ################################################################
 def showLukyResults(update, results):
@@ -253,7 +255,7 @@ def main():
     updater = Updater(bot_token, use_context=True)
 
     sg = updater.dispatcher
-
+    
     sg.add_handler(CommandHandler('hello', hello))
     sg.add_handler(CommandHandler('search', findAll))
     sg.add_handler(CommandHandler('title', findByTitle))

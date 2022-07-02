@@ -35,6 +35,7 @@ with open(Path('confs/settings.json'), 'r') as json_file:
 ```
 
 ## User's Guide
+
 * `/hello` - Say Hello!
 * `/search` - Search any word in the song title or artist name or lyrics
 * `/title` - Search any word in the song title
@@ -42,7 +43,7 @@ with open(Path('confs/settings.json'), 'r') as json_file:
 
 ## Built With
 
-* [Python](http://https://www.python.org/)
+* [Python](http://https://www.python.org/) - version 3.9.2
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [python-telegram-bot](https://python-telegram-bot.org/) - Dependency 
 
@@ -56,4 +57,4 @@ We use [SemVer](http://semver.org/) for versioning. See the [tags on this reposi
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
