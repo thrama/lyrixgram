@@ -34,6 +34,8 @@ with open(Path('confs/settings.json'), 'r') as json_file:
   confs = json.load(json_file)
 ```
 
+The script creates a log file called `lyrixgram.log`.
+
 ## User's Guide
 
 * `/hello` - Say Hello!

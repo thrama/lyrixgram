@@ -9,7 +9,8 @@ from telegram.ext import Updater, CommandHandler
 
 
 # enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+# first line is: time, levelName, fileName, functionName, lineNumber, message
+logging.basicConfig(filename="lyrixgram.log", format='%(asctime)s, %(levelname)s, %(filename)s, %(funcName)s(), %(lineno)d, %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,8 @@ def showResults(update, results, text):
     # total match founds
     update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
     showLogo(update)
+
+    logger.info(f'Provided best results to user \'{format(update.message.from_user.first_name)}\'')  #log
   
 
 # showLukyResults ################################################################
@@ -61,10 +64,13 @@ def showLukyResults(update, results):
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
     showLogo(update)
 
+    logger.info(f'Provided lukiest result to user \'{format(update.message.from_user.first_name)}\'')  #log
+
 
 # error ######################################################################
 def error(update, context):
     """Log errors caused by Updates."""
+
     logger.warning(f'Update {update} caused error {context.error}')
 
 
@@ -76,6 +82,7 @@ def error(update, context):
 def hello(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
+    logger.info(f'Said hello to user \'{format(update.message.from_user.first_name)}\'!')  #log
 
 
 # findAll ####################################################################
