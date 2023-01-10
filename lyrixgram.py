@@ -52,7 +52,7 @@ def showResults(update, results, text):
 
 
 # showLukyResults ################################################################
-def showLukyResults(update, results):
+def showLuckyResults(update, results):
     """Shows the luckiest result."""
     update.message.reply_text('*** Luckiest result')
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
@@ -126,7 +126,7 @@ def findLyrics(update, context):
 
 
 # iamLucky ###################################################################
-def iamLucky(update, context):
+def lucky(update, context):
     """If you fill lucky..."""
     trackFind = False
 
@@ -156,32 +156,30 @@ def iamLucky(update, context):
 
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showLukyResults(update, results)
-                trackFind = True
-
+                showLuckyResults(update, results)
+                
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
                 update.message.reply_text('AUTH ERROR: Ops. Something were wrong...')
                 logger.debug(f'Authentication failed: {results}')
-                trackFind = True
 
             # the usage limit has been reached
             elif results["message"]["header"]["status_code"] == 402:
                 update.message.reply_text('LIMIT ERROR: Ops. Something were wrong...')
                 logger.debug(f'The usage limit has been reached: {results}')
-                trackFind = True
 
             # system busy
             elif results["message"]["header"]["status_code"] == 503:
                 update.message.reply_text('musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
                 logger.debug(f'The usage limit has been reached: {results}')
-                trackFind = True
-
+                
             # others status codes
             # list of status codes:
             # https://developer.musixmatch.com/documentation/status-codes
             else:
                 logger.debug(f'Generic error: {results}')
+
+            trackFind = True
 
 
 #
@@ -195,7 +193,7 @@ def main():
 
     updater.dispatcher.add_handler(CommandHandler('hello', hello))
     updater.dispatcher.add_handler(CommandHandler('search', findLyrics))
-    updater.dispatcher.add_handler(CommandHandler('iamlucky', iamLucky))
+    updater.dispatcher.add_handler(CommandHandler('lucky', lucky))
 
     updater.dispatcher.add_error_handler(error)
 
