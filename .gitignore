@@ -144,8 +144,9 @@ dmypy.json
 
 ### Lorenzo ###
 ###############
-
 confs/
+nohup.out
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
