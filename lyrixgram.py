@@ -70,7 +70,6 @@ def showLukyResults(update, results):
 # error ######################################################################
 def error(update, context):
     """Log errors caused by Updates."""
-
     logger.warning(f'Update {update} caused error {context.error}')
 
 
