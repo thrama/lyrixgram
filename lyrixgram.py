@@ -62,7 +62,7 @@ def showLukyResults(update, results):
 # error ######################################################################
 def error(update, context):
     """Log errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+    logger.warning(f'Update {update} caused error {context.error}')
 
 
 #
@@ -131,8 +131,6 @@ def findLyrics(update, context):
 # iamLucky ###################################################################
 def iamLucky(update, context):
     """If you fill lucky..."""
-    global musixmach_apikey
-
     trackFind = False
 
     # loop until a track is found or the process obtain a blocking error
@@ -155,7 +153,7 @@ def iamLucky(update, context):
         
         except requests.exceptions.Timeout as errt:
             logger.error(f"A Timeout Error occurred: {repr(errt)}")
-        
+
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
 
@@ -197,7 +195,8 @@ def iamLucky(update, context):
 # main #######################################################################
 def main():
     """Start the bot."""
-    global bot_token
+    #global bot_token
+    #global musixmach_apikey
 
     updater = Updater(bot_token, use_context=True)
 
