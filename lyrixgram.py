@@ -53,7 +53,7 @@ def showResults(update, results, text):
 
 # showLukyResults ################################################################
 def showLukyResults(update, results):
-    """Shows the luckiest results."""
+    """Shows the luckiest result."""
     update.message.reply_text('*** Luckiest result')
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
     showLogo(update)
@@ -140,7 +140,7 @@ def iamLucky(update, context):
             # connect to the API service
             response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.get?apikey={musixmach_apikey}&commontrack_id={randomNumber}')
             results = response.json()
-            logger.debug(f'{results}')
+            logger.debug(f'Lucky result: {results}')
 
         except requests.exceptions.HTTPError as errh:
             logger.error(f"An Http Error occurred: {repr(errh)}")
