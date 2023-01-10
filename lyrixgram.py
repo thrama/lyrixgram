@@ -195,13 +195,11 @@ def main():
 
     updater = Updater(bot_token, use_context=True)
 
-    sg = updater.dispatcher
+    updater.dispatcher.add_handler(CommandHandler('hello', hello))
+    updater.dispatcher.add_handler(CommandHandler('search', findLyrics))
+    updater.dispatcher.add_handler(CommandHandler('iamlucky', iamLucky))
 
-    sg.add_handler(CommandHandler('hello', hello))
-    sg.add_handler(CommandHandler('search', findLyrics))
-    sg.add_handler(CommandHandler('iamlucky', iamLucky))
-
-    sg.add_error_handler(error)
+    updater.dispatcher.add_error_handler(error)
 
     updater.start_polling()
     updater.idle()
