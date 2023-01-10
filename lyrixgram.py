@@ -1,25 +1,23 @@
 import json
 import requests
 import logging
-import random
-from datetime import datetime
 from pathlib import Path
-from telegram import ParseMode
-from telegram.ext import Updater, CommandHandler
+from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode)
+from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
+                          ConversationHandler)
+import random
 
-
-# enable logging
-# first line is: time, levelName, fileName, functionName, lineNumber, message
-logging.basicConfig(filename="lyrixgram.log", format='%(asctime)s, %(levelname)s, %(filename)s, %(funcName)s(), %(lineno)d, %(message)s',
-                    level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# read settings
-with open(Path('confs/settings.json'), 'r') as json_file:
+# set credentials
+with open(Path('confs/credentials.json'), 'r') as json_file:
     confs = json.load(json_file)
 
 musixmach_apikey = confs['credentials']['musicxmatch_apikey']
 bot_token = confs['credentials']['telegrambot_token']
+
+# enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 #
@@ -32,13 +30,11 @@ def showLogo(update):
     randomNumber = random.randint(1, 5)
 
     if randomNumber == 5:
-        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>',
-                                    parse_mode=ParseMode.HTML,
-                                    disable_web_page_preview=True)
+        update.message.reply_text('<em>(powered by <a href="https://www.musixmatch.com/">musiXmatch</a>)</em>', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
 # showResults ################################################################
-def showResults(update, results, text):
+def showResults(update, results):
     """Shows the find results."""
     n = 0
     for t in results["message"]["body"]["track_list"]:
@@ -54,23 +50,19 @@ def showResults(update, results, text):
     update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
     showLogo(update)
 
-    logger.info(f'Provided best results to user \'{format(update.message.from_user.first_name)}\'')  #log
-  
 
 # showLukyResults ################################################################
 def showLukyResults(update, results):
-    """Show results for command 'lucky'."""
     update.message.reply_text('*** Luckiest result')
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
+    # update.message.reply_text(f'***')
     showLogo(update)
-
-    logger.info(f'Provided lukiest result to user \'{format(update.message.from_user.first_name)}\'')  #log
 
 
 # error ######################################################################
 def error(update, context):
     """Log errors caused by Updates."""
-    logger.warning(f'Update {update} caused error {context.error}')
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
 #
@@ -81,93 +73,37 @@ def error(update, context):
 def hello(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
-    logger.info(f'Said hello to user \'{format(update.message.from_user.first_name)}\'!')  #log
+    # update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
 
-# findAll ####################################################################
-def findAll(update, context):
+# findLyrics #################################################################
+def findLyrics(update, context):
     """Search text in the song title or artist name or lyrics."""
+    global musixmach_apikey
+
     text = update.message.text
-    text = text.replace('/search ', '')  # remove command from text
+    text = text.replace('/search', '')  # remove command from text
     if text in ('', ' '):
         update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
 
     else:
         try:
             # connect to the API service
-            response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmach_apikey}&q={text}&s_track_rating=desc&page=1&page_size={confs["view"]["max_items"]}')
+            response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmach_apikey}&q={text}&s_track_rating=desc&page=1&page_size=5&country=it')
             results = response.json()
             logger.debug(f'{results}')
 
         except requests.exceptions.HTTPError as errh:
             logger.error(f"An Http Error occurred: {repr(errh)}")
-
         except requests.exceptions.ConnectionError as errc:
             logger.error(f"An Error Connecting to the API occurred: {repr(errc)}")
-
         except requests.exceptions.Timeout as errt:
             logger.error(f"A Timeout Error occurred: {repr(errt)}")
-
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
-
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showResults(update, results, text)
-
-            # authentication error
-            elif results["message"]["header"]["status_code"] == 401:
-                update.message.reply_text('Ops. Something were wrong...')
-                logger.debug('Authentication failed: {results}')
-
-            # the usage limit has been reached
-            elif results["message"]["header"]["status_code"] == 402:
-                update.message.reply_text('Ops. Something were wrong...')
-                logger.debug(f'The usage limit has been reached: {results}')
-
-            # system busy
-            elif results["message"]["header"]["status_code"] == 503:
-                update.message.reply_text('musiXmatch is a bit busy at the moment and your request can’t be satisfied.')
-                logger.debug(f'The usage limit has been reached: {results}')
-
-            # others status codes
-            # list of status codes:
-            # https://developer.musixmatch.com/documentation/status-codes
-            else:
-                update.message.reply_text('Ops. Something were wrong...')
-                logger.debug(f'Generic error: {results}')
-
-
-# findByTitle #################################################################
-def findByTitle(update, context):
-    """Search text in the song title."""
-    text = update.message.text
-    text = text.replace('/title ', '')  # remove command from text
-    if text in ('', ' '):
-        update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
-
-    else:
-        try:
-            # connect to the API service
-            response = requests.get(f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmach_apikey}&q_track={text}&s_track_rating=desc&page=1&page_size={confs["view"]["max_items"]}')
-            results = response.json()
-            logger.debug(f'{results}')
-
-        except requests.exceptions.HTTPError as errh:
-            logger.error(f"An Http Error occurred: {repr(errh)}")
-
-        except requests.exceptions.ConnectionError as errc:
-            logger.error(f"An Error Connecting to the API occurred: {repr(errc)}")
-
-        except requests.exceptions.Timeout as errt:
-            logger.error(f"A Timeout Error occurred: {repr(errt)}")
-
-        except requests.exceptions.RequestException as err:
-            logger.error(f"An Unknown Error occurred: {repr(err)}")
-
-        else:
-            if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showResults(update, results, text)
+                showResults(update, results)       
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
@@ -195,6 +131,8 @@ def findByTitle(update, context):
 # iamLucky ###################################################################
 def iamLucky(update, context):
     """If you fill lucky..."""
+    global musixmach_apikey
+
     trackFind = False
 
     # loop until a track is found or the process obtain a blocking error
@@ -214,10 +152,10 @@ def iamLucky(update, context):
 
         except requests.exceptions.ConnectionError as errc:
             logger.error(f"An Error Connecting to the API occurred: {repr(errc)}")
-
+        
         except requests.exceptions.Timeout as errt:
             logger.error(f"A Timeout Error occurred: {repr(errt)}")
-
+        
         except requests.exceptions.RequestException as err:
             logger.error(f"An Unknown Error occurred: {repr(err)}")
 
@@ -248,6 +186,7 @@ def iamLucky(update, context):
             # list of status codes:
             # https://developer.musixmatch.com/documentation/status-codes
             else:
+                # update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
                 logger.debug(f'Generic error: {results}')
 
 
@@ -258,6 +197,8 @@ def iamLucky(update, context):
 # main #######################################################################
 def main():
     """Start the bot."""
+    global bot_token
+
     updater = Updater(bot_token, use_context=True)
 
     updater.dispatcher.add_handler(CommandHandler('hello', hello))
