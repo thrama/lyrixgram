@@ -47,7 +47,7 @@ def showResults(update, results, text):
             update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
     # total match founds
-    update.message.reply_text(f'Results for <i>{text}</i>: {n} / {results["message"]["header"]["available"]}')
+    update.message.reply_text(f'Results for <i>{text}</i>: {n} / {results["message"]["header"]["available"]}', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     showLogo(update)
 
 
@@ -72,7 +72,7 @@ def error(update, context):
 # hello ######################################################################
 def hello(update, context):
     """Say hello."""
-    update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
+    update.message.reply_text(f'Hello {update.message.from_user.first_name}')
 
 
 # findLyrics #################################################################
