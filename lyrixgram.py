@@ -22,9 +22,6 @@ musixmach_apikey = confs['credentials']['musicxmatch_apikey']
 bot_token = confs['credentials']['telegrambot_token']
 
 
-#
-# LIBS #######################################################################
-#
 
 # showLogo ###################################################################
 def showLogo(update):
@@ -74,9 +71,6 @@ def error(update, context):
     logger.warning(f'Update {update} caused error {context.error}')
 
 
-#
-# COMMANDS ###################################################################
-#
 
 # hello ######################################################################
 def hello(update, context):
@@ -252,9 +246,6 @@ def iamLucky(update, context):
                 logger.debug(f'Generic error: {results}')
 
 
-#
-# MAIN #######################################################################
-#
 
 # main #######################################################################
 def main():
