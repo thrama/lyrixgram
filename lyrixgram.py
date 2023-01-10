@@ -34,7 +34,7 @@ def showLogo(update):
 
 
 # showResults ################################################################
-def showResults(update, results):
+def showResults(update, results, text):
     """Shows the find results."""
     n = 0
     for t in results["message"]["body"]["track_list"]:
@@ -79,7 +79,7 @@ def hello(update, context):
 # findLyrics #################################################################
 def findLyrics(update, context):
     """Search text in the song title or artist name or lyrics."""
-    global musixmach_apikey
+    #global musixmach_apikey
 
     text = update.message.text
     text = text.replace('/search', '')  # remove command from text
@@ -103,7 +103,7 @@ def findLyrics(update, context):
             logger.error(f"An Unknown Error occurred: {repr(err)}")
         else:
             if results["message"]["header"]["status_code"] == 200:  # the request was successful
-                showResults(update, results)       
+                showResults(update, results, text)       
 
             # authentication error
             elif results["message"]["header"]["status_code"] == 401:
