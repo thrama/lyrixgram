@@ -47,15 +47,15 @@ def showResults(update, results, text):
             update.message.reply_text(f'{n}) <b>{t["track"]["track_name"]}</b> - {t["track"]["artist_name"]} (rate: {t["track"]["track_rating"]}) [ <a href="{t["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
     # total match founds
-    update.message.reply_text(f'Results for "{text}": {n} / {results["message"]["header"]["available"]}')
+    update.message.reply_text(f'Results for <i>{text}</i>: {n} / {results["message"]["header"]["available"]}')
     showLogo(update)
 
 
 # showLukyResults ################################################################
 def showLukyResults(update, results):
+    """Shows the luckiest results."""
     update.message.reply_text('*** Luckiest result')
     update.message.reply_text(f'<b>{results["message"]["body"]["track"]["track_name"]}</b> - {results["message"]["body"]["track"]["artist_name"]} [ <a href="{results["message"]["body"]["track"]["track_share_url"]}">&gt;&gt</a> ]', parse_mode=ParseMode.HTML, disable_web_page_preview=False)
-    # update.message.reply_text(f'***')
     showLogo(update)
 
 
@@ -73,18 +73,15 @@ def error(update, context):
 def hello(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello {format(update.message.from_user.first_name)}')
-    # update.message.reply_text(f'Hello {format(update.message.from_user)}')
 
 
 # findLyrics #################################################################
 def findLyrics(update, context):
     """Search text in the song title or artist name or lyrics."""
-    #global musixmach_apikey
-
     text = update.message.text
     text = text.replace('/search', '')  # remove command from text
     if text in ('', ' '):
-        update.message.reply_text('{}, enter a text to search'.format(update.message.from_user.first_name))
+        update.message.reply_text(f'{update.message.from_user.first_name}, enter a text to search')
 
     else:
         try:
@@ -184,7 +181,6 @@ def iamLucky(update, context):
             # list of status codes:
             # https://developer.musixmatch.com/documentation/status-codes
             else:
-                # update.message.reply_text(f'GENERIC ERROR: random number is {randomNumber}')
                 logger.debug(f'Generic error: {results}')
 
 
@@ -195,9 +191,6 @@ def iamLucky(update, context):
 # main #######################################################################
 def main():
     """Start the bot."""
-    #global bot_token
-    #global musixmach_apikey
-
     updater = Updater(bot_token, use_context=True)
 
     updater.dispatcher.add_handler(CommandHandler('hello', hello))
