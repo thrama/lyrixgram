@@ -19,10 +19,13 @@ The first step is to create the file for the credentials. You have to make a JSO
 
 ```
 {
-    "credentials": {
-        "musicxmatch_apikey": <API key>,
-        "telegrambot_token": <token>
-    }
+  "credentials": {
+      "musicxmatch_apikey": <API key>,
+      "telegrambot_token": <token>
+  },
+	"view": {
+		"max_items": 5
+	}
 }
 ```
 
