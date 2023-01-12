@@ -198,7 +198,6 @@ def iamLucky(update, context):
 
     # loop until a track is found or the process obtain a blocking error
     while trackFind is False:
-
         try:
             # generate a random number to use as track id
             randomNumber = random.randint(1, 6000000)
