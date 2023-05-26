@@ -21,9 +21,6 @@ logging.basicConfig(filename="lyrixgram.log", format='%(asctime)s, %(levelname)s
 logger = logging.getLogger(__name__)
 
 
-#
-# LIBS #######################################################################
-#
 
 # showLogo ###################################################################
 def showLogo(update):
@@ -72,9 +69,6 @@ def error(update, context):
     logger.warning(f'Update {update} caused error {context.error}')
 
 
-#
-# COMMANDS ###################################################################
-#
 
 # hello ######################################################################
 def hello(update, context):
@@ -251,9 +245,6 @@ def iamLucky(update, context):
                 break
 
 
-#
-# MAIN #######################################################################
-#
 
 # main #######################################################################
 def main():
