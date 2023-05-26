@@ -54,7 +54,7 @@ def showResults(update, results, text):
     showLogo(update)
 
     logger.info(f'Provided best results to user [{format(update.message.from_user.first_name)}]')  #log
-  
+
 
 # showLukyResults ################################################################
 def showLukyResults(update, results):
