@@ -1,12 +1,12 @@
 APScheduler==3.6.3
 cachetools==4.2.2
-certifi==2021.10.8
+certifi>=2022.12.07
 charset-normalizer==2.0.12
 idna==3.3
 python-telegram-bot==13.11
 pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
-requests==2.27.1
+requests>=2.31.0
 six==1.16.0
 tornado>=6.3.2
 tzdata==2022.1
