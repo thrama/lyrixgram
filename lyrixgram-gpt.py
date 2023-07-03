@@ -101,6 +101,8 @@ def find_all_command(update, context):
     """Search text in the song title, artist name, or lyrics."""
     text = update.message.text.replace('/search ', '').strip()
 
+    logging.info(f'User input for find_all_command: {text}')  # Log
+
     if not text:
         update.message.reply_text(f'{update.message.from_user.first_name}, enter a text to search')
     else:
@@ -132,6 +134,8 @@ def find_all_command(update, context):
 def find_by_title_command(update, context):
     """Search text in the song title."""
     text = update.message.text.replace('/title ', '').strip()
+
+    logging.info(f'User input for find_by_title_command: {text}')  # Log
 
     if not text:
         update.message.reply_text(f'{update.message.from_user.first_name}, enter a text to search')

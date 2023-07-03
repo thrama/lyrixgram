@@ -26,13 +26,13 @@ LyrixGram is a Telegram bot that allows you to search for song lyrics using the 
 
     ```json
     {
-    "credentials": {
-        "musicxmatch_apikey": "YOUR_MUSIXMATCH_API_KEY",
-        "telegrambot_token": "YOUR_TELEGRAM_BOT_TOKEN"
-    },
-    "view": {
-        "max_items": 10
-    }
+        "credentials": {
+            "musicxmatch_apikey": "YOUR_MUSIXMATCH_API_KEY",
+            "telegrambot_token": "YOUR_TELEGRAM_BOT_TOKEN"
+        },
+        "view": {
+            "max_items": 10
+        }
     }
     ```
 
@@ -63,4 +63,4 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

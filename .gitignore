@@ -3,9 +3,10 @@
 
 ### Lyrixgram ###
 confs/
-gitlazy
+lyrixgram.log
 .deepsource.toml
 .gitignore
+gitlazy
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
