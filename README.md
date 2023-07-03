@@ -1,55 +1,66 @@
-# Lyrixgram
+# LyrixGram Bot
 
-Telegram bot [@Lyrixgrambot](https://t.me/Lyrixgrambot) to search lyrics with [musiXmatch](https://www.musixmatch.com/).
+LyrixGram is a Telegram bot that allows you to search for song lyrics using the [musiXmatch](https://www.musixmatch.com/) API. You can search by song title, artist name, or even lyrics. Additionally, the bot provides a "lucky" feature that randomly selects a song for you.
 
-## Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on deploying the project on a live system.
+## Prerequisites
 
-### Prerequisites
-[Telegram](https://telegram.org/) app is available on most devices.
-[python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) library provides a pure Python interface for the Telegram Bot API.
+- [Python](http://https://www.python.org/) - version 3.9.2
+- `pip` package manager
+- [python-telegram-bot](https://python-telegram-bot.org/) - Dependency 
 
-A complete list of libs used is in the file [`requirements.txt`](https://github.com/thrama/lyrixgram/blob/master/requirements.txt).
+## Installation
 
-### Installing
-The first step is to create the file for the credentials. You have to make a JSON file in the /conf directory. The structure of the file is:
-```
-{
-  "credentials": {
-      "musicxmatch_apikey": <API key>,
-      "telegrambot_token": <token>
-  },
-	"view": {
-		"max_items": 5
-	}
-}
-```
+1. Clone the repository:
 
-You also need to update the part of the code to load the settings:
-```
-# read settings
-with open(Path('confs/settings.json'), 'r') as json_file:
-  confs = json.load(json_file)
-```
+    ```bash
+    git clone https://github.com/thrama/lyrixgram.git
+    ```
 
-The script creates a log file called `lyrixgram.log`.
+2. Install the required dependencies:
 
-## User's Guide
-* `/hello` - Say Hello!
-* `/search` - Search any word in the song title or artist name or lyrics
-* `/title` - Search any word in the song title
-* `/lucky` - I fill lucky!
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-## Built With
-* [Python](http://https://www.python.org/) - version 3.9.2
-* [Visual Studio Code](https://code.visualstudio.com/)
-* [python-telegram-bot](https://python-telegram-bot.org/) - Dependency 
+3. Create a `confs/settings.json` file and add your API credentials for musiXmatch and Telegram bot. The file should have the following structure:
 
-## Versioning
-We use [SemVer](http://semver.org/) for versioning. See the [tags on this repository](https://github.com/thrama/lyrixgram/tags) for available versions.
+    ```json
+    {
+    "credentials": {
+        "musicxmatch_apikey": "YOUR_MUSIXMATCH_API_KEY",
+        "telegrambot_token": "YOUR_TELEGRAM_BOT_TOKEN"
+    },
+    "view": {
+        "max_items": 10
+    }
+    }
+    ```
 
-## Authors
-* **Lorenzo Lombardi** - [GitHub](https://github.com/thrama)
+Replace `YOUR_MUSIXMATCH_API_KEY` with your actual musiXmatch API key and `YOUR_TELEGRAM_BOT_TOKEN` with your Telegram bot token.
+
+> **Note:** The script creates a log in the file `lyrixgram.log`.
+
+## Usage
+
+1. Run the script:
+
+    ```bash
+    python lyrixgram.py
+    ```
+
+2. Start a conversation with the bot on Telegram.
+
+3. Use the following commands to interact with the bot:
+
+    - `/hello` - Say hello to the bot.
+    - `/search <text>` - Search for songs by text (title, artist name, or lyrics).
+    - `/title <text>` - Search for songs by title.
+    - `/lucky` - Get a randomly selected song.
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
 ## License
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
