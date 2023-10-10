@@ -22,6 +22,7 @@ with open(settings_file, 'r') as json_file:
 musixmatch_apikey = confs['credentials']['musicxmatch_apikey']
 bot_token = confs['credentials']['telegrambot_token']
 
+
 # Show logo
 def show_logo(update):
     """Just shows the logo."""
@@ -32,6 +33,7 @@ def show_logo(update):
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True
         )
+
 
 # Show results
 def show_results(update, results, text):
@@ -67,6 +69,7 @@ def show_results(update, results, text):
     show_logo(update)
     logger.info("Provided best results to user %s", update.message.from_user.first_name)  # Log
 
+
 # Show lucky results
 def show_lucky_results(update, results):
     """Shows the luckiest result."""
@@ -85,16 +88,19 @@ def show_lucky_results(update, results):
     show_logo(update)
     logger.info("Provided luckiest result to user %s", update.message.from_user.first_name)  # Log
 
+
 # Error handler
 def error_handler(update, context):
     """Log errors caused by Updates."""
     logger.warning("Update %s caused error %s", update, context.error)  # Log
+
 
 # Hello command
 def hello_command(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello, {update.message.from_user.first_name}!')
     logger.info("Said hello to user %s", update.message.from_user.first_name)  # Log
+
 
 # Find all command
 def find_all_command(update, context):
@@ -130,6 +136,7 @@ def find_all_command(update, context):
                 update.message.reply_text(error_message)
                 logger.debug("Error with status code %s: %s", status_code, results)  # Log
 
+
 # Find by title command
 def find_by_title_command(update, context):
     """Search text in the song title."""
@@ -163,6 +170,7 @@ def find_by_title_command(update, context):
                     error_message = 'musiXmatch is a bit busy at the moment and your request can’t be satisfied.'
                 update.message.reply_text(error_message)
                 logger.debug("Error with status code %s: %s", status_code, results)  # Log
+
 
 # I am lucky command
 def iam_lucky_command(update, context):
@@ -200,6 +208,7 @@ def iam_lucky_command(update, context):
                 logger.debug("Error with status code %s: %s", status_code, results)  # Log
                 break
 
+
 # Main function
 def main():
     """Start the bot."""
@@ -215,6 +224,7 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
 
 if __name__ == '__main__':
     main()
