@@ -65,7 +65,7 @@ def show_results(update, results, text):
         update.message.reply_text(f'No results found for <i>{text}</i>.')
 
     show_logo(update)
-    logger.info(f'Provided best results to user [{update.message.from_user.first_name}]')  # Log
+    logger.info("Provided best results to user %s", update.message.from_user.first_name)  # Log
 
 # Show lucky results
 def show_lucky_results(update, results):
@@ -83,25 +83,25 @@ def show_lucky_results(update, results):
     )
 
     show_logo(update)
-    logger.info(f'Provided luckiest result to user [{update.message.from_user.first_name}]')  # Log
+    logger.info("Provided luckiest result to user %s", update.message.from_user.first_name)  # Log
 
 # Error handler
 def error_handler(update, context):
     """Log errors caused by Updates."""
-    logger.warning(f'Update {update} caused error {context.error}')
+    logger.warning("Update %s caused error %s", update, context.error)  # Log
 
 # Hello command
 def hello_command(update, context):
     """Say hello."""
     update.message.reply_text(f'Hello, {update.message.from_user.first_name}!')
-    logger.info(f'Said hello to user [{update.message.from_user.first_name}]')  # Log
+    logger.info("Said hello to user %s", update.message.from_user.first_name)  # Log
 
 # Find all command
 def find_all_command(update, context):
     """Search text in the song title, artist name, or lyrics."""
     text = update.message.text.replace('/search ', '').strip()
 
-    logging.info(f'User input for find_all_command: {text}')  # Log
+    logging.info("User input for find_all_command: %s", text)  # Log
 
     if not text:
         update.message.reply_text(f'{update.message.from_user.first_name}, enter a text to search')
@@ -112,9 +112,9 @@ def find_all_command(update, context):
                 f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmatch_apikey}&q={text}&s_track_rating=desc&page=1&page_size={confs["view"]["max_items"]}'
             )
             results = response.json()
-            logger.debug(f'{results}')
+            logger.debug("%s", results)  # Log
         except requests.exceptions.RequestException as err:
-            logger.error(f"An Error occurred: {repr(err)}")
+            logger.error("An Error occurred: %s", repr(err))  # Log
         else:
             if results["message"]["header"]["status_code"] == 200:  # The request was successful
                 show_results(update, results, text)
@@ -128,14 +128,14 @@ def find_all_command(update, context):
                 elif status_code == 503:
                     error_message = 'musiXmatch is a bit busy at the moment and your request can\'t be satisfied.'
                 update.message.reply_text(error_message)
-                logger.debug(f'Error with status code {status_code}: {results}')
+                logger.debug("Error with status code %s: %s", status_code, results)  # Log
 
 # Find by title command
 def find_by_title_command(update, context):
     """Search text in the song title."""
     text = update.message.text.replace('/title ', '').strip()
 
-    logging.info(f'User input for find_by_title_command: {text}')  # Log
+    logging.info("User input for find_by_title_command: %s", text)  # Log
 
     if not text:
         update.message.reply_text(f'{update.message.from_user.first_name}, enter a text to search')
@@ -146,9 +146,9 @@ def find_by_title_command(update, context):
                 f'http://api.musixmatch.com/ws/1.1/track.search?apikey={musixmatch_apikey}&q_track={text}&s_track_rating=desc&page=1&page_size={confs["view"]["max_items"]}'
             )
             results = response.json()
-            logger.debug(f'{results}')
+            logger.debug("%s", results)  # Log
         except requests.exceptions.RequestException as err:
-            logger.error(f"An Error occurred: {repr(err)}")
+            logger.error("An Error occurred: %s", repr(err))  # Log
         else:
             if results["message"]["header"]["status_code"] == 200:  # The request was successful
                 show_results(update, results, text)
@@ -162,7 +162,7 @@ def find_by_title_command(update, context):
                 elif status_code == 503:
                     error_message = 'musiXmatch is a bit busy at the moment and your request can’t be satisfied.'
                 update.message.reply_text(error_message)
-                logger.debug(f'Error with status code {status_code}: {results}')
+                logger.debug("Error with status code %s: $s", status_code, results)  # Log
 
 # I am lucky command
 def iam_lucky_command(update, context):
@@ -180,9 +180,9 @@ def iam_lucky_command(update, context):
                 f'http://api.musixmatch.com/ws/1.1/track.get?apikey={musixmatch_apikey}&commontrack_id={random_number}'
             )
             results = response.json()
-            logger.debug(f'{results}')
+            logger.debug("%", results)  # Log
         except requests.exceptions.RequestException as err:
-            logger.error(f"An Error occurred: {repr(err)}")
+            logger.error("An Error occurred: %", repr(err))  # Log
         else:
             if results["message"]["header"]["status_code"] == 200:  # The request was successful
                 show_lucky_results(update, results)
@@ -197,7 +197,7 @@ def iam_lucky_command(update, context):
                 elif status_code == 503:
                     error_message = 'musiXmatch is a bit busy at the moment and your request can\'t be satisfied.'
                 update.message.reply_text(error_message)
-                logger.debug(f'Error with status code {status_code}: {results}')
+                logger.debug("Error with status code %s: %s", status_code, results)  # Log
                 break
 
 # Main function
