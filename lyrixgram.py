@@ -49,7 +49,7 @@ def show_results(update, results, text):
 
             if index == 0:
                 update.message.reply_text('***')
-            
+
             update.message.reply_text(
                 f'{index + 1}) <b>{track_name}</b> - {artist_name} (rate: {track_rating}) [ <a href="{track_url}">&gt;&gt</a> ]',
                 parse_mode=ParseMode.HTML,
