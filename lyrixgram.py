@@ -162,7 +162,7 @@ def find_by_title_command(update, context):
                 elif status_code == 503:
                     error_message = 'musiXmatch is a bit busy at the moment and your request can’t be satisfied.'
                 update.message.reply_text(error_message)
-                logger.debug("Error with status code %s: $s", status_code, results)  # Log
+                logger.debug("Error with status code %s: %s", status_code, results)  # Log
 
 # I am lucky command
 def iam_lucky_command(update, context):
