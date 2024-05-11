@@ -2,7 +2,7 @@ APScheduler==3.6.3
 cachetools==4.2.2
 certifi>=2022.12.07
 charset-normalizer==2.0.12
-idna==3.3
+idna==3.7
 python-telegram-bot==13.11
 pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
