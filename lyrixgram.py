@@ -3,8 +3,8 @@ import random
 import json
 import requests
 from pathlib import Path
-from telegram import ParseMode
-from telegram.ext import Updater, CommandHandler
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 # Enable logging
 logging.basicConfig(
@@ -208,22 +208,37 @@ def iam_lucky_command(update, context):
                 logger.debug("Error with status code %s: %s", status_code, results)  # Log
                 break
 
-
-# Main function
 def main():
     """Start the bot."""
-    updater = Updater(bot_token, use_context=True)
-    dispatcher = updater.dispatcher
 
-    dispatcher.add_handler(CommandHandler('hello', hello_command))
-    dispatcher.add_handler(CommandHandler('search', find_all_command))
-    dispatcher.add_handler(CommandHandler('title', find_by_title_command))
-    dispatcher.add_handler(CommandHandler('lucky', iam_lucky_command))
+    async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(f'Hello {update.effective_user.first_name}')
 
-    dispatcher.add_error_handler(error_handler)
+    app = ApplicationBuilder().token(bot_token).build()
 
-    updater.start_polling()
-    updater.idle()
+    #app.add_handler(CommandHandler("hello", hello))
+    app.add_handler(CommandHandler('hello', hello_command))
+    app.add_handler(CommandHandler('search', find_all_command))
+    app.add_handler(CommandHandler('title', find_by_title_command))
+    app.add_handler(CommandHandler('lucky', iam_lucky_command))
+
+    app.run_polling()
+    
+    #updater = Updater(bot_token, use_context=True)
+    #dispatcher = updater.dispatcher
+
+    #dispatcher.add_handler(CommandHandler('hello', hello_command))
+    #dispatcher.add_handler(CommandHandler('search', find_all_command))
+    #dispatcher.add_handler(CommandHandler('title', find_by_title_command))
+    #dispatcher.add_handler(CommandHandler('lucky', iam_lucky_command))
+
+    #dispatcher.add_error_handler(error_handler)
+
+    #updater.start_polling()
+    #updater.idle()
+
+    #updater.start_polling()
+    #updater.idle()
 
 
 if __name__ == '__main__':
