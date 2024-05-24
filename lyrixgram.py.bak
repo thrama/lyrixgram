@@ -14,20 +14,31 @@ from telegram.ext import (
 )
 
 # Enable logging
-logging.basicConfig(
-    filename="lyrixgram.log",
-    format='%(asctime)s, %(levelname)s, %(filename)s, %(funcName)s(), %(lineno)d, %(message)s',
-    level=logging.INFO
-)
-## Set higher logging level for httpx to avoid all GET and POST requests being logged
-logging.getLogger("httpx").setLevel(logging.INFO)
+try:
+    logging.basicConfig(
+        filename="lyrixgram.log",
+        format='%(asctime)s, %(levelname)s, %(filename)s, %(funcName)s(), %(lineno)d, %(message)s',
+        level=logging.INFO
+    )
+except Exception as e:
+    print(f"Logging setup failed: {e}")
+
+# Set higher logging level for httpx to avoid all GET and POST requests being logged
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
 # Read settings
 settings_file = Path('.', 'confs', 'settings.json')
-with open(settings_file, 'r') as json_file:
-    confs = json.load(json_file)
+try:
+    with open(settings_file, 'r') as json_file:
+        confs = json.load(json_file)
+except FileNotFoundError:
+    logger.error(f"Settings file {settings_file} not found.")
+    raise
+except json.JSONDecodeError:
+    logger.error(f"Error decoding JSON from the settings file {settings_file}.")
+    raise
 
 musixmatch_apikey = confs['credentials']['musicxmatch_apikey']
 bot_token = confs['credentials']['telegrambot_token']
@@ -103,6 +114,19 @@ async def hello_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     await update.message.reply_text(f'Hello, {update.message.from_user.first_name}!')
     logger.info("Said hello to user %s", update.message.from_user.first_name)  # Log
 
+# Helper function to handle API errors
+async def handle_api_error(update: Update, results: dict):
+    error_message = 'Oops, something went wrong...'
+    status_code = results["message"]["header"]["status_code"]
+    if status_code == 401:
+        error_message = 'AUTH ERROR: Oops, something went wrong...'
+    elif status_code == 402:
+        error_message = 'LIMIT ERROR: Oops, something went wrong...'
+    elif status_code == 503:
+        error_message = 'musiXmatch is a bit busy at the moment and your request can’t be satisfied.'
+    await update.message.reply_text(error_message)
+    logger.debug("Error with status code %s: %s", status_code, results)  # Log
+
 # Find all command
 async def find_all_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Search text in the song title, artist name, or lyrics."""
@@ -121,22 +145,15 @@ async def find_all_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 )
                 results = response.json()
                 logger.debug("%s", results)  # Log
+            except httpx.HTTPStatusError as err:
+                logger.error("HTTP error occurred: %s", repr(err))  # Log
             except httpx.RequestError as err:
-                logger.error("An Error occurred: %s", repr(err))  # Log
+                logger.error("Request error occurred: %s", repr(err))  # Log
             else:
                 if results["message"]["header"]["status_code"] == 200:  # The request was successful
                     await show_results(update, results, text)
                 else:
-                    error_message = 'Oops, something went wrong...'
-                    status_code = results["message"]["header"]["status_code"]
-                    if status_code == 401:
-                        error_message = 'AUTH ERROR: Oops, something went wrong...'
-                    elif status_code == 402:
-                        error_message = 'LIMIT ERROR: Oops, something went wrong...'
-                    elif status_code == 503:
-                        error_message = 'musiXmatch is a bit busy at the moment and your request can\'t be satisfied.'
-                    await update.message.reply_text(error_message)
-                    logger.debug("Error with status code %s: %s", status_code, results)  # Log
+                    await handle_api_error(update, results)
 
 # Find by title command
 async def find_by_title_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -156,22 +173,15 @@ async def find_by_title_command(update: Update, context: ContextTypes.DEFAULT_TY
                 )
                 results = response.json()
                 logger.debug("%s", results)  # Log
+            except httpx.HTTPStatusError as err:
+                logger.error("HTTP error occurred: %s", repr(err))  # Log
             except httpx.RequestError as err:
-                logger.error("An Error occurred: %s", repr(err))  # Log
+                logger.error("Request error occurred: %s", repr(err))  # Log
             else:
                 if results["message"]["header"]["status_code"] == 200:  # The request was successful
                     await show_results(update, results, text)
                 else:
-                    error_message = 'Oops, something went wrong...'
-                    status_code = results["message"]["header"]["status_code"]
-                    if status_code == 401:
-                        error_message = 'AUTH ERROR: Oops, something went wrong...'
-                    elif status_code == 402:
-                        error_message = 'LIMIT ERROR: Oops, something went wrong...'
-                    elif status_code == 503:
-                        error_message = 'musiXmatch is a bit busy at the moment and your request can’t be satisfied.'
-                    await update.message.reply_text(error_message)
-                    logger.debug("Error with status code %s: %s", status_code, results)  # Log
+                    await handle_api_error(update, results)
 
 # I am lucky command
 async def iam_lucky_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -191,23 +201,16 @@ async def iam_lucky_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
                 )
                 results = response.json()
                 logger.debug("%s", results)  # Log
+            except httpx.HTTPStatusError as err:
+                logger.error("HTTP error occurred: %s", repr(err))  # Log
             except httpx.RequestError as err:
-                logger.error("An Error occurred: %s", repr(err))  # Log
+                logger.error("Request error occurred: %s", repr(err))  # Log
             else:
                 if results["message"]["header"]["status_code"] == 200:  # The request was successful
                     await show_lucky_results(update, results)
                     track_found = True
                 else:
-                    error_message = 'Oops, something went wrong... :('
-                    status_code = results["message"]["header"]["status_code"]
-                    if status_code == 401:
-                        error_message = 'AUTH ERROR: Oops, something went wrong...'
-                    elif status_code == 402:
-                        error_message = 'LIMIT ERROR: Oops, something went wrong...'
-                    elif status_code == 503:
-                        error_message = 'musiXmatch is a bit busy at the moment and your request can\'t be satisfied.'
-                    await update.message.reply_text(error_message)
-                    logger.debug("Error with status code %s: %s", status_code, results)  # Log
+                    await handle_api_error(update, results)
                     break
 
 # Main function
